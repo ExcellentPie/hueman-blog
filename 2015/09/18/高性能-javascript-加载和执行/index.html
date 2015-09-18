@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>高性能 javascript系列(第一天) 理论篇之 加载和执行 | Tuomong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="今天开始准备关注高性能javascript，瞬间觉得自己又可以装高大上了，又可以瞎逼逼了~~~。当然，全部内容都是以笔记出现，内容来源于《高性能 javascript》，该系列的笔记将持续更新。
+话不多说了，今天的专题之一是加载和执行
+目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从脚本加载和运行的角度讨论提高那些需要大量javascript代码的web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能 javascript系列(第一天) 理论篇之 加载和执行">
+<meta property="og:url" content="http://blog.zhuoyuepie.com/2015/09/18/高性能-javascript-加载和执行/index.html">
+<meta property="og:site_name" content="Tuomong's Blog">
+<meta property="og:description" content="今天开始准备关注高性能javascript，瞬间觉得自己又可以装高大上了，又可以瞎逼逼了~~~。当然，全部内容都是以笔记出现，内容来源于《高性能 javascript》，该系列的笔记将持续更新。
+话不多说了，今天的专题之一是加载和执行
+目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从脚本加载和运行的角度讨论提高那些需要大量javascript代码的web">
+<meta property="og:image" content="http://blog.zhuoyuepie.com/images/high-javascript.jpg">
+<meta property="og:updated_time" content="2015-09-18T13:18:19.110Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能 javascript系列(第一天) 理论篇之 加载和执行">
+<meta name="twitter:description" content="今天开始准备关注高性能javascript，瞬间觉得自己又可以装高大上了，又可以瞎逼逼了~~~。当然，全部内容都是以笔记出现，内容来源于《高性能 javascript》，该系列的笔记将持续更新。
+话不多说了，今天的专题之一是加载和执行
+目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从脚本加载和运行的角度讨论提高那些需要大量javascript代码的web">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  
+  
+    <link rel="stylesheet" href="/scrollLoading/style.css" type="text/css">
+  
+  
+
+
+  
+    <style type="text/css">
+      .logo { background-image:url(/css/images/logo.jpg); }
+    </style>
+  
+
+  
+    <link href='//fonts.useso.com/css?family=Titillium+Web:300,400,600' rel='stylesheet' type='text/css'>
+    <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css" type="text/css">
+</head>
+
+<body>
+  <div id="wrap">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div class="container">
+      <div class="container-inner">
+        <div id="header-title">
+          <h1 class="logo-wrap">
+            <a href="/" class="logo"></a>
+          </h1>
+          
+            <h2 class="subtitle-wrap">
+              <p class="subtitle">Do what you can, try to do what you want to do.</p>
+            </h2>
+          
+        </div>
+        <div id="header-inner" class="nav-container">
+          <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+          <div class="nav-container-inner">
+            <ul id="main-nav">
+              
+                <li class="main-nav-list-item" ><a class="main-nav-list-link" href="/">主页</a></li>
+              
+                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/文章/">文章</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/笔记/">笔记</a></li></ul>
+                  
+            </ul>
+            <nav id="sub-nav">
+              <div id="search-form-wrap">
+                <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="搜索"><input type="hidden" name="sitesearch" value="http://blog.zhuoyuepie.com"></form>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <div class="main-body container-inner">
+        <div class="main-body-inner">
+          <section id="main">
+            <div class="main-body-header">
+
+              <h1 class="header"><a class="page-title-link" href="/categories/笔记/">笔记</a></h1>
+            </div>
+            <div class="main-body-content">
+              
+  <article id="post-高性能-javascript-加载和执行" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+      <!--  -->
+      
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      高性能 javascript系列(第一天) 理论篇之 加载和执行
+    </h1>
+  
+
+        </header>
+      
+      <p class="article-byline">
+        <a href="/2015/09/18/高性能-javascript-加载和执行/" class="article-date">
+  <time datetime="2015-09-17T16:00:00.000Z" itemprop="datePublished">2015-09-18</time>
+</a>
+      </p>
+      <div class="article-entry" itemprop="articleBody">
+        <p><img src="/images/high-javascript.jpg" alt="加载和执行"><br>今天开始准备关注高性能javascript，瞬间觉得自己又可以装高大上了，又可以瞎逼逼了~~~。当然，全部内容都是以笔记出现，内容来源于<a href="https://www.baidu.com/s?wd=%E9%AB%98%E6%80%A7%E8%83%BDjavascript%20pdf%E4%B8%8B%E8%BD%BD&amp;rsv_spt=1&amp;issp=1&amp;f=3&amp;rsv_bp=0&amp;rsv_idx=2&amp;ie=utf-8&amp;tn=baiduhome_pg&amp;rsv_enter=1&amp;rsv_sug3=42&amp;rsv_sug1=45&amp;rsv_sug2=1&amp;prefixsug=%E9%AB%98%E6%80%A7%E8%83%BDjavascript&amp;rsp=0&amp;inputT=20600&amp;rsv_sug4=2509840&amp;rsv_sug=2" target="_blank" rel="external">《高性能 javascript》</a>，该系列的笔记将持续更新。</p>
+<p>话不多说了，今天的专题之一是<code>加载和执行</code></p>
+<h2 id="目的">目的</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本专题的目的是从<code>脚本加载和运行</code>的角度讨论<code>提高那些需要大量javascript代码的web应用的实际性能</code>的策略。<br>下面我们直接给出一些策略：</p>
+<ul>
+<li><p style="color:red;margin:0px">从脚本位置的角度，可以在body闭合标签之前，将所有的script标签放在页面底部。这能确保在脚本执行之前页面已经完成了渲染。</p></li>
+<li><p style="color:red;margin:0px">从脚本数量的角度，可以采用脚本合并技术如（YUI Compressor），页面script标签越少，加载也就越快，响应也更迅速。</p></li>
+<li><p style="color:red;margin:0px">从脚本加载的时间的角度，可以采用无阻塞下载javascript的方法如使用defer属性、动态创建script标签、使用XMLHttpRequest对象下载等，这个无阻塞脚本在某种程度上来说不会阻塞浏览器</p><h2 id="开篇">开篇</h2></li>
+</ul>
+<p>有这样一段描述：<code>javascript在浏览器中的性能，可以认为是开发者所面临的最严重的可用性问题。这个问题因javascript的阻塞特性变得复杂，也就是说，当浏览器在执行javascript代码时，不能同时做其他任何事情。事实上，大多数浏览器使用单一进程来处理UI界面刷新和执行脚本，同一时刻只能做一件事情，所以，脚本执行时间越长，用户等待响应时间就越长。</code></p>
+<p>以上描述意味着，script标签每次出现都霸道的让页面等待脚本的解析和执行。无论当前的脚本代码是内嵌还是在外部链接文件中，页面在加载和渲染都必须停下来等待脚本执行完成。这是页面生成周期中的必要环节，因为脚本执行可能修改页面的内容。最常见的例子就是document.write()(经常用来显示广告)，例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;title&gt;script example&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;p&gt;</span><br><span class="line">		&lt;script&gt;</span><br><span class="line">		document.write(<span class="string">"hello world!"</span>);</span><br><span class="line">		&lt;/script&gt;</span><br><span class="line">	&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>当浏览器遇到script标签时，当前HTML页面无从获知javascript代码是否会添加内容、引入其他元素或者删除标签。因此，这是浏览器会停止处理页面，并执行javascript代码。然后再继续解析和渲染页面。同样的情况也会发生在使用src属性加载的脚本代码中。在这个过程中，页面渲染和用户交互都是完全被阻塞的。</p>
+<h2 id="脚本位置">脚本位置</h2><p>先给出结论：</p><p style="color:red;margin:0px">由于脚本会阻塞页面其他资源的下载，因此推荐将所有的script标签尽可能的放到body标签的底部，以尽量减少整个页面下载的影响。</p><br>HTML4 规范指出scrip标签可以放在HTML文档的head和body标签中，并允许出现多次，按照惯例，script标签出现在head中，挨着的links标签用来加载外部css样式或者其他页面元信息。理论上来说，把与样式和行为有关的脚本放在一起，并先加载他们，有助于确保页面渲染和交互的正确性。例如：<p></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;title&gt;script example&lt;/title&gt;</span><br><span class="line">	&lt;script <span class="built_in">type</span>=<span class="string">"text/javascript"</span> src = <span class="string">"file1.js"</span>&gt;&lt;/script&gt;</span><br><span class="line">	&lt;script <span class="built_in">type</span>=<span class="string">"text/javascript"</span> src = <span class="string">"file2.js"</span>&gt;&lt;/script&gt;</span><br><span class="line">	&lt;script <span class="built_in">type</span>=<span class="string">"text/javascript"</span> src = <span class="string">"file3.js"</span>&gt;&lt;/script&gt;</span><br><span class="line">	&lt;link rel=<span class="string">"stylesheet"</span> <span class="built_in">type</span>=<span class="string">"text/css"</span> href=<span class="string">"style.css"</span> /&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;p&gt;hello world&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>看似正常的代码实际上却有着十分严重的性能问题：</p>
+<ul>
+<li><code>脚本会阻塞页面的渲染，直到他们全部下载完并执行后页面渲染和交互才会继续。</code></li>
+<li><code>由于第一个问题，会导致延迟，通常表现出空白页面，用户无法浏览本内容和交互。</code></li>
+</ul>
+<h2 id="组织脚本">组织脚本</h2><p>先给出结论：</p><p style="color:red;margin:0px">通常一个大型网站或网络应用需要依赖数个javascript文件。你可以把多个文件合并为一个，这样只需要引入一个script标签，就可以减少性能消耗。</p><br>由于每个script标签初始下载时都会阻塞页面渲染，所以减少页面包含的script标签的数量，有助于改善这一问题，每次解析和执行javascript代码都会造成一定的延时，因此<code>最小化延迟时间将会明显改善页面的总体性能</code>。考虑到HTTP请求会带来额外的性能开销，因此下载耽搁100kb的文件比下载4个25kb的文件更快，也就是说，<code>减少页面中外链脚本文件的数量将会改善性能</code>.<p></p>
+<h2 id="无阻塞脚本">无阻塞脚本</h2><p>先给出结论：</p><p style="color:red;margin:0px">减少javascript文件大小并限制HTTP请求数仅仅是创建响应迅速的web应用的第一步。web应用的功能越丰富，需要的javascript代码就越多，所以精简源代码并不总是可行。为了避免这种情况，你需要向页面中逐步加载javascript文件，这样做在某种程度上来说不会阻塞浏览器。</p>即是<code>无阻塞脚本</code>。<p></p>
+<p><code>无阻塞脚本的秘诀在于，在页面加载完成后再加载javascript代码</code>。<br>无阻塞脚本的实现方式有以下几种：</p>
+<ul>
+<li><p>延迟的脚本<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HTML4 为script标签提供了一个扩展属性：defer。defer属性指明本元素所含的标签不会修改DOM，因此代码能够安全的延迟执行。该属性只有IE4++和Firefo3.5++支持，因此<code>它不是一个理想的跨浏览器解决方案</code>。下面是一个<code>延迟的脚本</code>例子：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script <span class="built_in">type</span>=<span class="string">"text/javascript"</span> src=<span class="string">"file1.js"</span> defer&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态脚本元素<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于文档对象模型DOM的存在，你可以使用javascript动态创建HTMl中几乎所有的内容。其原因在于，由于script元素与页面中的其他元素并无差异：都能通过DOM进行引用，都能在文档中移动、删除或是被创建。你可以用标准的DOM方法轻松的创建一个script元素。例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var script = document.createElement(<span class="string">"script"</span>);</span><br><span class="line">script.src = <span class="string">"file1.js"</span>;</span><br><span class="line">script.type = <span class="string">"text/javascript"</span>;</span><br><span class="line">document.getElementsByTagName(<span class="string">"head"</span>)[<span class="number">0</span>].appendChild(script);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>下面推荐几种无阻塞模式</p>
+
+      </div>
+      <footer class="article-footer">
+        <a data-url="http://blog.zhuoyuepie.com/2015/09/18/高性能-javascript-加载和执行/" data-id="ciep7tw2k000dp4wpm33jk9g5" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+        
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web前端/">web前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
+
+      </footer>
+    </div>
+  </article>
+  
+  
+
+            </div>
+          </section>
+          <aside id="sidebar">
+  <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+  <div class="sidebar-top">
+    <p>关注我 :</p>
+    <ul class="social-links">
+      
+        <li><a class="social-tooltip" title="github" href="https://github.com/ExcellentPie" target="_blank"><i class="icon fa fa-github"></i></a></li>
+      
+        <li><a class="social-tooltip" title="weibo" href="https://www.baidu.com" target="_blank"><i class="icon fa fa-weibo"></i></a></li>
+      
+    </ul>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/09/18/高性能-javascript-数据存取/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <p class="article-nav-title">高性能 javascript系列(第一天) 理论篇之 数据存取</p>
+      <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+    </a>
+  
+</nav>
+
+  
+  <div class="widgets-container">
+    
+      
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/18/高性能-javascript-加载和执行/" class="thumbnail">
+  
+    <span style="background-image:url(/images/high-javascript.jpg
+)" alt="高性能 javascript系列(第一天) 理论篇之 加载和执行" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
+              <p class="item-title"><a href="/2015/09/18/高性能-javascript-加载和执行/" class="title">高性能 javascript系列(第一天) 理论篇之 加载和执行</a></p>
+              <p class="item-date"><time datetime="2015-09-17T16:00:00.000Z" itemprop="datePublished">2015-09-18</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/18/高性能-javascript-数据存取/" class="thumbnail">
+  
+    <span style="background-image:url(/images/high-javascript.jpg
+)" alt="高性能 javascript系列(第一天) 理论篇之 数据存取" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
+              <p class="item-title"><a href="/2015/09/18/高性能-javascript-数据存取/" class="title">高性能 javascript系列(第一天) 理论篇之 数据存取</a></p>
+              <p class="item-date"><time datetime="2015-09-17T16:00:00.000Z" itemprop="datePublished">2015-09-18</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/17/javascript-闭包/" class="thumbnail">
+  
+    <span style="background-image:url(/images/package-detail.jpg
+)" alt="javascript 闭包" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/文章/">文章</a></p>
+              <p class="item-title"><a href="/2015/09/17/javascript-闭包/" class="title">javascript 闭包</a></p>
+              <p class="item-date"><time datetime="2015-09-16T16:00:00.000Z" itemprop="datePublished">2015-09-17</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/17/javascript-原型链/" class="thumbnail">
+  
+    <span style="background-image:url(/images/prototype_1.png
+)" alt="javascript 原型链" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/文章/">文章</a></p>
+              <p class="item-title"><a href="/2015/09/17/javascript-原型链/" class="title">javascript 原型链</a></p>
+              <p class="item-date"><time datetime="2015-09-16T16:00:00.000Z" itemprop="datePublished">2015-09-17</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/16/Ajax技术/" class="thumbnail">
+  
+    <span style="background-image:url(/images/ajax.jpg
+)" alt="Ajax 技术" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/文章/">文章</a></p>
+              <p class="item-title"><a href="/2015/09/16/Ajax技术/" class="title">Ajax 技术</a></p>
+              <p class="item-date"><time datetime="2015-09-15T16:00:00.000Z" itemprop="datePublished">2015-09-16</time></p>
+            </div>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/文章/">文章</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/web前端/">web前端</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原创/">原创</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-float">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/web前端/" style="font-size: 20px;">web前端</a> <a href="/tags/原创/" style="font-size: 16.67px;">原创</a> <a href="/tags/教程/" style="font-size: 10px;">教程</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/转载/" style="font-size: 13.33px;">转载</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="http://ql91.github.io">qinlu</a>
+          </li>
+        
+          <li>
+            <a href="http://xhay1122.com">熊孩纸</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+        </div>
+      </div>
+    </div>
+    <footer id="footer">
+  
+  <div class="container">
+    <div class="container-inner">
+      <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+      <div class="credit">
+        <h1 class="logo-wrap">
+          <a href="/" class="logo"></a>
+        </h1>
+        <p>&copy; 2015 不想逗妹纸的小男孩</p>
+        <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+    
+
+
+  <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+  <script src="/scrollLoading/jquery.scrollLoading.js" type="text/javascript"></script>
+  <script src="/scrollLoading/main.js" type="text/javascript"></script>
+
+
+<script src="/js/html-patch.js" type="text/javascript"></script>
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

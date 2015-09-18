@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>javascript 原型链 | Tuomong&#39;s Blog</title>
+  <title>高性能 javascript系列(第一天) 理论篇之 数据存取 | Tuomong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="原型链一直是个很抽象的概念,看不到,摸不着.随着最近对JavaScript进一步的学习,我对原型链有了一点理解,下面讲出来.
-基础知识在JavaScript中,一共有两种类型的值,原始值和对象值.每个对象都有一个内部属性[[prototype]],我们通常称之为原型.原型的值可以是一个对象,也可以是null.如果它的值是一个对象,则这个对象也一定有自己的原型.这样就形成了一条线性的链,我们称之为原">
+  <meta name="description" content="话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
+目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从数据存取的角度讨论提高那些需要大">
 <meta property="og:type" content="article">
-<meta property="og:title" content="javascript 原型链">
-<meta property="og:url" content="http://blog.zhuoyuepie.com/2015/09/17/javascript-原型链/index.html">
+<meta property="og:title" content="高性能 javascript系列(第一天) 理论篇之 数据存取">
+<meta property="og:url" content="http://blog.zhuoyuepie.com/2015/09/18/高性能-javascript-数据存取/index.html">
 <meta property="og:site_name" content="Tuomong's Blog">
-<meta property="og:description" content="原型链一直是个很抽象的概念,看不到,摸不着.随着最近对JavaScript进一步的学习,我对原型链有了一点理解,下面讲出来.
-基础知识在JavaScript中,一共有两种类型的值,原始值和对象值.每个对象都有一个内部属性[[prototype]],我们通常称之为原型.原型的值可以是一个对象,也可以是null.如果它的值是一个对象,则这个对象也一定有自己的原型.这样就形成了一条线性的链,我们称之为原">
-<meta property="og:image" content="http://blog.zhuoyuepie.com/images/prototype_1.png">
-<meta property="og:image" content="http://blog.zhuoyuepie.com/images/prototype_2.png">
-<meta property="og:updated_time" content="2015-09-17T16:58:28.570Z">
+<meta property="og:description" content="话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
+目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从数据存取的角度讨论提高那些需要大">
+<meta property="og:image" content="http://blog.zhuoyuepie.com/images/high-javascript.jpg">
+<meta property="og:image" content="http://blog.zhuoyuepie.com/images/function-create.png">
+<meta property="og:updated_time" content="2015-09-18T18:17:17.239Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="javascript 原型链">
-<meta name="twitter:description" content="原型链一直是个很抽象的概念,看不到,摸不着.随着最近对JavaScript进一步的学习,我对原型链有了一点理解,下面讲出来.
-基础知识在JavaScript中,一共有两种类型的值,原始值和对象值.每个对象都有一个内部属性[[prototype]],我们通常称之为原型.原型的值可以是一个对象,也可以是null.如果它的值是一个对象,则这个对象也一定有自己的原型.这样就形成了一条线性的链,我们称之为原">
+<meta name="twitter:title" content="高性能 javascript系列(第一天) 理论篇之 数据存取">
+<meta name="twitter:description" content="话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
+目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从数据存取的角度讨论提高那些需要大">
   
   
     <link rel="icon" href="/favicon.png">
@@ -91,11 +91,11 @@
           <section id="main">
             <div class="main-body-header">
 
-              <h1 class="header"><a class="page-title-link" href="/categories/文章/">文章</a></h1>
+              <h1 class="header"><a class="page-title-link" href="/categories/笔记/">笔记</a></h1>
             </div>
             <div class="main-body-content">
               
-  <article id="post-javascript-原型链" class="article article-single article-type-post" itemscope itemprop="blogPost">
+  <article id="post-高性能-javascript-数据存取" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
       <!--  -->
       
@@ -103,45 +103,63 @@
           
   
     <h1 class="article-title" itemprop="name">
-      javascript 原型链
+      高性能 javascript系列(第一天) 理论篇之 数据存取
     </h1>
   
 
         </header>
       
       <p class="article-byline">
-        <a href="/2015/09/17/javascript-原型链/" class="article-date">
-  <time datetime="2015-09-16T16:00:00.000Z" itemprop="datePublished">2015-09-17</time>
+        <a href="/2015/09/18/高性能-javascript-数据存取/" class="article-date">
+  <time datetime="2015-09-17T16:00:00.000Z" itemprop="datePublished">2015-09-18</time>
 </a>
       </p>
       <div class="article-entry" itemprop="articleBody">
-        <p>原型链一直是个很抽象的概念,看不到,摸不着.随着最近对JavaScript进一步的学习,我对原型链有了一点理解,下面讲出来.</p>
-<h2 id="基础知识">基础知识</h2><p>在JavaScript中,一共有两种类型的值,原始值和对象值.每个对象都有一个内部属性[[prototype]],我们通常称之为原型.原型的值可以是一个对象,也可以是null.如果它的值是一个对象,则这个对象也一定有自己的原型.这样就形成了一条线性的链,我们称之为原型链.</p>
-<p>访问一个对象的原型可以使用ES5中的Object.getPrototypeOf方法,或者ES6中的<strong>proto</strong>属性.</p>
-<p>原型链的作用之一是可以用来实现继承,比如我们新建一个数组,数组的方法就是从数组的原型上继承而来的.</p>
-<h2 id="图形化原型链">图形化原型链</h2><p>虽然我们都说原型链,但实际上,在不考虑网页中frame的情况,js引擎在执行期间的某一时刻,所有存在的对象组成的是一棵原型树.默认情况下,只有一棵树.根节点可以说是Object.prototype,也可以说是null.</p>
-<p><img src="/images/prototype_1.png" alt="图形化原型链"></p>
-<p>但我们可以再建立一棵原型树,通过使用Object.create方法</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var foo = Object.create(null);        //foo是一个对象,但它是游离的,不属于已有的那棵原型树</span><br><span class="line">var bar = Object.create(foo);         //bar的原型是foo</span><br><span class="line">var baz = Object.create(foo);         //baz的原型是foo</span><br></pre></td></tr></table></figure>
-<p>这样我们有了第二棵原型树</p>
-<p><img src="/images/prototype_2.png" alt="图形化原型链"></p>
-<h2 id="遍历原型链">遍历原型链</h2><p>我们没有办法遍历到所有以某个对象为原型的对象,但我们可以向上遍历,获取到一个对象所有的上层原型,这个原型链必定是线性的,尽头是null.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> getPrototypeChain(object) &#123;</span><br><span class="line">    var protoChain = [];</span><br><span class="line">    <span class="keyword">while</span> (object = object.__proto__) &#123;</span><br><span class="line">        protoChain.push(object);</span><br><span class="line">    &#125;</span><br><span class="line">    protoChain.push(null);</span><br><span class="line">    <span class="built_in">return</span> protoChain;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>试验一下,不同的环境实现不同,显示形式也不同.下面是在chrome控制台中的显示.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getPrototypeChain(new String(<span class="string">""</span>))</span><br></pre></td></tr></table></figure>
-<p>[String, Object, null]                     //依次是String.prototype,Object.prototype,null</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getPrototypeChain(<span class="function"><span class="title">function</span></span>()&#123;&#125;)</span><br></pre></td></tr></table></figure>
-<p>[function Empty() {}, Object, null]        //依次是Function.prototype,Object.prototype,null<br>内置类型的对象的原型链并不长,下面试试宿主对象.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getPrototypeChain(document.createElement(<span class="string">"div"</span>))</span><br></pre></td></tr></table></figure>
-<p>[HTMLDivElement, HTMLElement, Element, Node, Object, null]<br>这个就长多了.</p>
-<h2 id="注意点">注意点</h2><p>在编写使用原型继承模型的复杂代码时，理解原型继承模型十分重要。同时，还要清楚代码中原型链的长度，并在必要的时候结束原型链，以避免存在的性能问题.</p>
+        <p><img src="/images/high-javascript.jpg" alt="数据存取"><br>话不多说了，今天的第二个专题是<code>数据存取</code>，不想听我瞎逼逼的童鞋，可以自己去买一本<a href="https://www.baidu.com/s?wd=%E9%AB%98%E6%80%A7%E8%83%BDjavascript%20pdf%E4%B8%8B%E8%BD%BD&amp;rsv_spt=1&amp;issp=1&amp;f=3&amp;rsv_bp=0&amp;rsv_idx=2&amp;ie=utf-8&amp;tn=baiduhome_pg&amp;rsv_enter=1&amp;rsv_sug3=42&amp;rsv_sug1=45&amp;rsv_sug2=1&amp;prefixsug=%E9%AB%98%E6%80%A7%E8%83%BDjavascript&amp;rsp=0&amp;inputT=20600&amp;rsv_sug4=2509840&amp;rsv_sug=2" target="_blank" rel="external">《高性能 javascript》</a>，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。</p>
+<h2 id="目的">目的</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本专题的目的是从<code>数据存取</code>的角度讨论<code>提高那些需要大量javascript代码的web应用的实际性能</code>的策略。<br>下面我们先直接给出一些策略：</p>
+<ul>
+<li><p style="color:red;margin:0px">访问<code>字面量</code>和<code>局部变量</code>的速度最快，相反，访问<code>数组元素</code>和<code>对象</code>成员相对较慢。</p></li>
+<li><p style="color:red;margin:0px">由于局部变量存在于<code>作用域链</code>的起始位置，因此访问局部变量比访问作用于变量更快。变量在作用域链中的位置越深，访问需要的时间就越长。由于全局变量总处于作用域链的最末端，因此访问速度最慢。</p></li>
+<li><p style="color:red;margin:0px">避免使用with语句，因为它会改变<code>执行环境</code>的作用域链。同样，try-catch语句中的catch子句也有相同的影响，因此也要小心使用。</p></li>
+<li><p style="color:red;margin:0px">嵌套的对象成员会明显影响性能，尽量少用</p></li>
+<li><p style="color:red;margin:0px">属性或方法在原型链中的位置越深，访问它的速度也越慢</p></li>
+<li><p style="color:red;margin:0px">通常来说，你可以把常用的对象成员，数组元素，跨域变量保存在局部变量中来改善javascript性能，因为局部变量访问速度最快</p>
+
+</li>
+</ul>
+<p>看着上面的策略，我感觉很悲催，什么是<code>字面量</code>，<code>局部变量</code>，<code>执行环境</code>，<code>作用域链</code>？，这些是什么gui？这也是该专题中需要了解的一些重要的概念。另外，本专题会回答一下一系列问题：</p>
+<ul>
+<li>作用域链到底什么？作用域是什么？作用域链和作用域有什么关系？</li>
+<li>作用域链有什么作用？</li>
+<li>函数在执行过程中如何解析标识符？</li>
+<li>如何提高函数解析标识符的性能？</li>
+<li>什么是闭包？闭包创建和执行时的内部机制？</li>
+<li>什么是对象成员、原型、原型链？如何提高对象成员的读写性能？</li>
+</ul>
+<h2 id="开篇">开篇</h2><p>我们从一段话开始：<code>计算机科学中有一个经典的问题是通过改变数据的存储位置来获得最佳读写性能，数据存储的位置关系到代码执行过程中数据的检索速度。在javascript中，这个问题相对简单，因为就只有存取方案可供选择。数据存储位置会很大程度影响其读取速度</code>。</p>
+<p>为了了解javascript的数据存取原理，我们先来了解一下javascript中四种基本的数据存取位置。</p>
+<ul>
+<li>字面量<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字面量只代表自身，不存储在特定位置。javascript中的字面量有：字符串、数字、布尔值、对象、数组、函数、正则表达式以及特殊的null和undefined值。</li>
+<li>本地变量<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开发人员使用var定义的数据存储单元。</li>
+<li>数组元素<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存储在javascript数组对象内部，以数字作为索引。</li>
+<li>对象成员<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存储在javascript对象内部，以字符串作为索引。</li>
+</ul>
+<p><code>每一种数据存储的位置都有不同的读写消耗。大多数情况下，从一个字面量和局部变量中存取数据的性能是微不足道的。访问数组元素和对象成员的代价则高一些。如果在乎运行速度，那么尽量使用字面量和局部变量，减少数组项和对象成员的使用</code>。为此，有几种模式来定位和规避问题，以及优化代码。</p>
+<h2 id="管理作用域">管理作用域</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;作用域概念的理解javascript的关键所在，不仅仅从性能角度，还从功能角度。作用域对javascript有许多影响，从确定哪些变量可以访问，到确定this的赋值，javascript作用域同样关系到性能，<code>要理解速度和性能的关系，必须理解作用域的工作原理</code>。下面我们先来了解作用域链和标识符解析，掌握作用域链的工作和标识符的解析过程。</p>
+<h3 id="作用域链和标识符解析">作用域链和标识符解析</h3><p>每一个javascript函数都表示为一个对象，更确切的说，是Function对象的一个实例。Function对象同其他对象一样，拥有可以编程访问的属性和一系列不能通过代码访问只供javascript引擎存取的内部属性。这里我们讲一下其中的一个内部属性<code>[[scope]]</code>。</p>
+<p>[[scope]]包含了一个函数被创建的作用域中对象的集合。这个集合被称为函数的<code>作用域链</code>。它决定了那些数据可以被函数访问。函数作用域中的每个对象都被称为一个可变对象，这些对象都以“键值对”的形式存在于作用域中。当创建一个函数的时候，它的作用域链会被作用域中可访问数据填充。</p>
+<p>事到如今，我发现几个非常严重的问题，作用域链到底什么？作用域是什么？作用域链和作用域有什么关系？作用域链有什么作用？<code>我简单的这样理解，作用域链就是函数在所处环境中的关系集合，这个集合包含了外部关系和内部关系，外部关系维持着函数外部环境中可以访问的数据的引用，内部关系维持着函数的形参、实参、局部变量等数据的引用。内部关系就是作用域</code>。</p>
+<p>如何理解这句话呢，先来看看函数所处环境，一般函数所处环境有两种，<code>创建环境</code>和<code>执行环境</code>。创建环境是函数只申明未执行时的环境，执行环境是函数从执行开始到结束时的环境。<code>函数在不同的环境中进行活动，需要知道环境中哪些变量可以访问、自己怎样和这些可以访问的变量之间交互，因此它需要一种“数据结构”来存储并组织这些可以访问的变量，这个“数据结构”就是作用域链</code>。</p>
+<p>那么我们来研究一下函数的创建和执行过程。</p>
+<p>先申明一个全局函数，代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> add(num1, num2)&#123;</span><br><span class="line">	var sum = num1 + num2;</span><br><span class="line">	<span class="built_in">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当函数add创建后，它的作用域链中插入了一个对象变量，这个对象变量代表着所有在add函数外部环境中定义的变量，（在本例中）如window、document等，创建过程如下图：<br><img src="/images/function-create.png" alt="函数创建过程"><br>函数在创建环境中并不需要维持自身内部的局部变量、形参、实参等引用，因为函数并没有执行，但需要维持它与外在环境中的变量的引用。</p>
 
       </div>
       <footer class="article-footer">
-        <a data-url="http://blog.zhuoyuepie.com/2015/09/17/javascript-原型链/" data-id="ciep7tw2v000qp4wp8t1n85dg" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+        <a data-url="http://blog.zhuoyuepie.com/2015/09/18/高性能-javascript-数据存取/" data-id="ciepggmcz004pp4wpvg2wnhxu" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
         
         
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web前端/">web前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原创/">原创</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web前端/">web前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
 
       </footer>
     </div>
@@ -167,20 +185,20 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/09/17/javascript-闭包/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/09/18/高性能-javascript-加载和执行/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
       <p class="article-nav-title">
         
-          javascript 闭包
+          高性能 javascript系列(第一天) 理论篇之 加载和执行
         
       </p>
       <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
     </a>
   
   
-    <a href="/2015/09/16/Ajax技术/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/09/17/javascript-闭包/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
-      <p class="article-nav-title">Ajax 技术</p>
+      <p class="article-nav-title">javascript 闭包</p>
       <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
     </a>
   
