@@ -15,7 +15,9 @@
 目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从数据存取的角度讨论提高那些需要大">
 <meta property="og:image" content="http://blog.zhuoyuepie.com/images/high-javascript.jpg">
 <meta property="og:image" content="http://blog.zhuoyuepie.com/images/function-create.png">
-<meta property="og:updated_time" content="2015-09-18T18:17:17.239Z">
+<meta property="og:image" content="http://blog.zhuoyuepie.com/images/function-excute.png">
+<meta property="og:image" content="http://blog.zhuoyuepie.com/images/bibao.png">
+<meta property="og:updated_time" content="2015-09-19T10:36:09.541Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高性能 javascript系列(第一天) 理论篇之 数据存取">
 <meta name="twitter:description" content="话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
@@ -149,14 +151,27 @@
 <h3 id="作用域链和标识符解析">作用域链和标识符解析</h3><p>每一个javascript函数都表示为一个对象，更确切的说，是Function对象的一个实例。Function对象同其他对象一样，拥有可以编程访问的属性和一系列不能通过代码访问只供javascript引擎存取的内部属性。这里我们讲一下其中的一个内部属性<code>[[scope]]</code>。</p>
 <p>[[scope]]包含了一个函数被创建的作用域中对象的集合。这个集合被称为函数的<code>作用域链</code>。它决定了那些数据可以被函数访问。函数作用域中的每个对象都被称为一个可变对象，这些对象都以“键值对”的形式存在于作用域中。当创建一个函数的时候，它的作用域链会被作用域中可访问数据填充。</p>
 <p>事到如今，我发现几个非常严重的问题，作用域链到底什么？作用域是什么？作用域链和作用域有什么关系？作用域链有什么作用？<code>我简单的这样理解，作用域链就是函数在所处环境中的关系集合，这个集合包含了外部关系和内部关系，外部关系维持着函数外部环境中可以访问的数据的引用，内部关系维持着函数的形参、实参、局部变量等数据的引用。内部关系就是作用域</code>。</p>
-<p>如何理解这句话呢，先来看看函数所处环境，一般函数所处环境有两种，<code>创建环境</code>和<code>执行环境</code>。创建环境是函数只申明未执行时的环境，执行环境是函数从执行开始到结束时的环境。<code>函数在不同的环境中进行活动，需要知道环境中哪些变量可以访问、自己怎样和这些可以访问的变量之间交互，因此它需要一种“数据结构”来存储并组织这些可以访问的变量，这个“数据结构”就是作用域链</code>。</p>
+<p>如何理解这句话呢，先来看看函数所处环境，一般函数所处环境有两种，<code>创建环境</code>和<code>执行环境</code>。创建环境是函数只申明未执行时的环境，执行环境是函数从执行开始到结束时的环境。<code>函数在不同的环境中进行活动，需要知道环境中哪些变量可以访问、自己怎样和这些可以访问的变量之间交互，因此它需要一种“数据结构”来存储并组织这些可以访问的变量，这个“数据结构”就是作用域链</code>。因此<code>作用域链的作用就是解析标识符，函数可以根据作用域链访问内存中的变量</code>。</p>
 <p>那么我们来研究一下函数的创建和执行过程。</p>
 <p>先申明一个全局函数，代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> add(num1, num2)&#123;</span><br><span class="line">	var sum = num1 + num2;</span><br><span class="line">	<span class="built_in">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>当函数add创建后，它的作用域链中插入了一个对象变量，这个对象变量代表着所有在add函数外部环境中定义的变量，（在本例中）如window、document等，创建过程如下图：<br><img src="/images/function-create.png" alt="函数创建过程"><br>函数在创建环境中并不需要维持自身内部的局部变量、形参、实参等引用，因为函数并没有执行，但需要维持它与外在环境中的变量的引用。</p>
+<p>当函数add创建后，它的作用域链中插入了一个对象变量，这个对象变量代表着所有在add函数的外部环境中定义的变量，（在本例中）如window、document等，创建过程如下图：<br><img src="/images/function-create.png" alt="函数创建过程"><br>函数在创建环境中并不需要维持自身内部的局部变量、形参、实参等引用，因为函数并没有执行，但需要维持它的外在环境中的变量的引用。<br>那么函数在执行的过程中发生了什么呢？假设执行代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var total = add(<span class="number">5</span>,<span class="number">10</span>);</span><br></pre></td></tr></table></figure></p>
+<p>函数在执行的时候，函数处于一个执行环境中，每次函数执行时，执行环境都是独一无二的。函数执行结束后，执行环境被销毁。那么函数在执行的时候，作用域链中发生了什么变化呢？</p>
+<ul>
+<li>首先执行环境中的作用域链保留了创建环境中的作用域链。</li>
+<li>其次javascript引擎会创建一个<code>活动对象</code>，该活动对象作为函数运行时的变量对象，维持了函数运行时的局部变量、形参、实参、this等引用。<code>该活动对象相当于函数运行时的作用域</code>。</li>
+<li>然后上述被创建的活动对象会被插入执行环境中作用域链的顶端。</li>
+<li>最后函数执行结束后，javascript引擎销毁作用域链中活动对象的引用，函数回到创建环境中。<br>函数执行过程如下图：<br><img src="/images/function-excute.png" alt="函数执行过程"><br>那么问题又来了，函数执行过程中，javascript引擎怎样去决定从哪里获取或存储数据的呢？这里就需要用到作用域链</li>
+<li>首先javascript引擎会搜索函数执行时的作用域链，从作用域链的顶端也就是活动对象开始，寻找同名标识符，如果找到就使用这个标识符对应的变量。</li>
+<li>如果上一过程未找到，继续在作用域链的下一对象中寻找，直到找到标识符。</li>
+<li>如果整个作用域链中的对象中都无该标识符，那么该标识符视为是未定义的。<br>以上便是javascript引擎解析标识符的过程，根据这个过程，我们知道了，函数在执行过程中，它访问和修改数据时，会有一个搜索过程，那么这个搜索过程的快慢必将影响javascript代码的性能。那么我们来关注一下标识符解析的性能。<h3 id="标识符解析的性能">标识符解析的性能</h3>我们先直接给出结论：<br><p style="color:red;margin:0px">如果某个跨作用域的的值在函数中被引用一次以上，那么就把它存储到局部变量里。</p><br>如何理解这个结论呢？<code>我的简单理解就是，跨作用域的值就是函数外部已经申明了的值，在函数外部申明的变量相对于局部变量也就是函数内部声明的变量而言，它在作用域链中的位置总是靠后于函数的内部变量，因此它的访问时间就越长。如果我们把它转化为局部变量，它的访问时间就变短了，这实际上是一种用空间换时间的做法</code>。<h3 id="闭包">闭包</h3>我其实不知道是谁取了这么个奇葩的名字，非要说的好像自己很专业似的，一切的专家就是在装高大上、瞎逼逼，总要用些很含糊的词装饰一下自己精湛的技术。不好意思，我只是在这里吐槽一下。<br>下面我把我对闭包的理解描述一下。<code>我简单的把闭包理解为嵌套在一个函数内部的函数</code>。<br>如何理解这句话呢？事实上，闭包它仍然是一个函数，只是被嵌套在了一个函数的内部。那么既然是这样，我似乎觉得闭包到底怎样定义已经不重要了，重要的是一个被嵌套在函数内部的函数，它拥有怎样的特性。</li>
+<li>闭包是在外函数被执行时创建的，这里的外函数就是嵌套闭包的那个函数，因此闭包不是唯一的。</li>
+<li>闭包被创建时，保留了外函数执行时的作用域链，也就是保留了外函数执行时的参数集合、局部变量、全局变量等信息。</li>
+<li>闭包也是函数，它同样遵循函数执行时的准则。<br>下面就来看看闭包的创建过程：<br><img src="/images/bibao.png" alt="闭包创建过程"><br>闭包的执行过程跟函数的执行过程一样。</li>
+</ul>
 
       </div>
       <footer class="article-footer">
-        <a data-url="http://blog.zhuoyuepie.com/2015/09/18/高性能-javascript-数据存取/" data-id="ciepggmcz004pp4wpvg2wnhxu" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+        <a data-url="http://blog.zhuoyuepie.com/2015/09/18/高性能-javascript-数据存取/" data-id="cieqmsmyn000d2kwpn7qil3qa" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
         
         
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web前端/">web前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
@@ -185,20 +200,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/09/18/高性能-javascript-加载和执行/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
-      <p class="article-nav-title">
-        
-          高性能 javascript系列(第一天) 理论篇之 加载和执行
-        
-      </p>
-      <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
-    </a>
   
-  
-    <a href="/2015/09/17/javascript-闭包/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/09/18/高性能-javascript-加载和执行/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
-      <p class="article-nav-title">javascript 闭包</p>
+      <p class="article-nav-title">高性能 javascript系列(第一天) 理论篇之 加载和执行</p>
       <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
     </a>
   
@@ -217,26 +222,6 @@
             
             <div class="item-thumbnail">
               
-<a href="/2015/09/18/高性能-javascript-加载和执行/" class="thumbnail">
-  
-    <span style="background-image:url(/images/high-javascript.jpg
-)" alt="高性能 javascript系列(第一天) 理论篇之 加载和执行" class="thumbnail-image"></span>
-  
-</a>
-
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
-              <p class="item-title"><a href="/2015/09/18/高性能-javascript-加载和执行/" class="title">高性能 javascript系列(第一天) 理论篇之 加载和执行</a></p>
-              <p class="item-date"><time datetime="2015-09-17T16:00:00.000Z" itemprop="datePublished">2015-09-18</time></p>
-            </div>
-          </li>
-        
-          <li>
-            
-            <div class="item-thumbnail">
-              
 <a href="/2015/09/18/高性能-javascript-数据存取/" class="thumbnail">
   
     <span style="background-image:url(/images/high-javascript.jpg
@@ -249,6 +234,26 @@
             <div class="item-inner">
               <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
               <p class="item-title"><a href="/2015/09/18/高性能-javascript-数据存取/" class="title">高性能 javascript系列(第一天) 理论篇之 数据存取</a></p>
+              <p class="item-date"><time datetime="2015-09-17T16:00:00.000Z" itemprop="datePublished">2015-09-18</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/18/高性能-javascript-加载和执行/" class="thumbnail">
+  
+    <span style="background-image:url(/images/high-javascript.jpg
+)" alt="高性能 javascript系列(第一天) 理论篇之 加载和执行" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
+              <p class="item-title"><a href="/2015/09/18/高性能-javascript-加载和执行/" class="title">高性能 javascript系列(第一天) 理论篇之 加载和执行</a></p>
               <p class="item-date"><time datetime="2015-09-17T16:00:00.000Z" itemprop="datePublished">2015-09-18</time></p>
             </div>
           </li>
@@ -370,6 +375,14 @@
         
           <li>
             <a href="http://xhay1122.com">熊孩纸</a>
+          </li>
+        
+          <li>
+            <a href="http://doubleyoyo.github.io//">周双</a>
+          </li>
+        
+          <li>
+            <a href="http://wangxizhu.github.io//">张川</a>
           </li>
         
       </ul>
