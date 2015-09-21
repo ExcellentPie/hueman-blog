@@ -5,23 +5,24 @@
   
   <title>高性能 javascript系列(第一天) 理论篇之 数据存取 | Tuomong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
-目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从数据存取的角度讨论提高那些需要大">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
+目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高性能 javascript系列(第一天) 理论篇之 数据存取">
 <meta property="og:url" content="http://blog.zhuoyuepie.com/2015/09/18/高性能-javascript-数据存取/index.html">
 <meta property="og:site_name" content="Tuomong's Blog">
-<meta property="og:description" content="话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
-目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从数据存取的角度讨论提高那些需要大">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
+目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;">
 <meta property="og:image" content="http://blog.zhuoyuepie.com/images/high-javascript.jpg">
 <meta property="og:image" content="http://blog.zhuoyuepie.com/images/function-create.png">
 <meta property="og:image" content="http://blog.zhuoyuepie.com/images/function-excute.png">
 <meta property="og:image" content="http://blog.zhuoyuepie.com/images/bibao.png">
-<meta property="og:updated_time" content="2015-09-19T10:36:09.541Z">
+<meta property="og:image" content="http://blog.zhuoyuepie.com/images/bibao-excute.png">
+<meta property="og:updated_time" content="2015-09-21T13:13:50.859Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高性能 javascript系列(第一天) 理论篇之 数据存取">
-<meta name="twitter:description" content="话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
-目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本专题的目的是从数据存取的角度讨论提高那些需要大">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;话不多说了，今天的第二个专题是数据存取，不想听我瞎逼逼的童鞋，可以自己去买一本《高性能 javascript》，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。
+目的&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;">
   
   
     <link rel="icon" href="/favicon.png">
@@ -117,7 +118,7 @@
 </a>
       </p>
       <div class="article-entry" itemprop="articleBody">
-        <p><img src="/images/high-javascript.jpg" alt="数据存取"><br>话不多说了，今天的第二个专题是<code>数据存取</code>，不想听我瞎逼逼的童鞋，可以自己去买一本<a href="https://www.baidu.com/s?wd=%E9%AB%98%E6%80%A7%E8%83%BDjavascript%20pdf%E4%B8%8B%E8%BD%BD&amp;rsv_spt=1&amp;issp=1&amp;f=3&amp;rsv_bp=0&amp;rsv_idx=2&amp;ie=utf-8&amp;tn=baiduhome_pg&amp;rsv_enter=1&amp;rsv_sug3=42&amp;rsv_sug1=45&amp;rsv_sug2=1&amp;prefixsug=%E9%AB%98%E6%80%A7%E8%83%BDjavascript&amp;rsp=0&amp;inputT=20600&amp;rsv_sug4=2509840&amp;rsv_sug=2" target="_blank" rel="external">《高性能 javascript》</a>，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。</p>
+        <p><img src="/images/high-javascript.jpg" alt="数据存取"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话不多说了，今天的第二个专题是<code>数据存取</code>，不想听我瞎逼逼的童鞋，可以自己去买一本<a href="https://www.baidu.com/s?wd=%E9%AB%98%E6%80%A7%E8%83%BDjavascript%20pdf%E4%B8%8B%E8%BD%BD&amp;rsv_spt=1&amp;issp=1&amp;f=3&amp;rsv_bp=0&amp;rsv_idx=2&amp;ie=utf-8&amp;tn=baiduhome_pg&amp;rsv_enter=1&amp;rsv_sug3=42&amp;rsv_sug1=45&amp;rsv_sug2=1&amp;prefixsug=%E9%AB%98%E6%80%A7%E8%83%BDjavascript&amp;rsp=0&amp;inputT=20600&amp;rsv_sug4=2509840&amp;rsv_sug=2" target="_blank" rel="external">《高性能 javascript》</a>，听说价格65，还是比较薄的那种，尽管就没有厚的。我感觉我像个好人，我就静静的分享一下我对这本书中的一些观点、概念的看法，希望有兴趣的童鞋一起探讨，好了，进入正题。</p>
 <h2 id="目的">目的</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本专题的目的是从<code>数据存取</code>的角度讨论<code>提高那些需要大量javascript代码的web应用的实际性能</code>的策略。<br>下面我们先直接给出一些策略：</p>
 <ul>
 <li><p style="color:red;margin:0px">访问<code>字面量</code>和<code>局部变量</code>的速度最快，相反，访问<code>数组元素</code>和<code>对象</code>成员相对较慢。</p></li>
@@ -166,12 +167,12 @@
 <li>如果整个作用域链中的对象中都无该标识符，那么该标识符视为是未定义的。<br>以上便是javascript引擎解析标识符的过程，根据这个过程，我们知道了，函数在执行过程中，它访问和修改数据时，会有一个搜索过程，那么这个搜索过程的快慢必将影响javascript代码的性能。那么我们来关注一下标识符解析的性能。<h3 id="标识符解析的性能">标识符解析的性能</h3>我们先直接给出结论：<br><p style="color:red;margin:0px">如果某个跨作用域的的值在函数中被引用一次以上，那么就把它存储到局部变量里。</p><br>如何理解这个结论呢？<code>我的简单理解就是，跨作用域的值就是函数外部已经申明了的值，在函数外部申明的变量相对于局部变量也就是函数内部声明的变量而言，它在作用域链中的位置总是靠后于函数的内部变量，因此它的访问时间就越长。如果我们把它转化为局部变量，它的访问时间就变短了，这实际上是一种用空间换时间的做法</code>。<h3 id="闭包">闭包</h3>我其实不知道是谁取了这么个奇葩的名字，非要说的好像自己很专业似的，一切的专家就是在装高大上、瞎逼逼，总要用些很含糊的词装饰一下自己精湛的技术。不好意思，我只是在这里吐槽一下。<br>下面我把我对闭包的理解描述一下。<code>我简单的把闭包理解为嵌套在一个函数内部的函数</code>。<br>如何理解这句话呢？事实上，闭包它仍然是一个函数，只是被嵌套在了一个函数的内部。那么既然是这样，我似乎觉得闭包到底怎样定义已经不重要了，重要的是一个被嵌套在函数内部的函数，它拥有怎样的特性。</li>
 <li>闭包是在外函数被执行时创建的，这里的外函数就是嵌套闭包的那个函数，因此闭包不是唯一的。</li>
 <li>闭包被创建时，保留了外函数执行时的作用域链，也就是保留了外函数执行时的参数集合、局部变量、全局变量等信息。</li>
-<li>闭包也是函数，它同样遵循函数执行时的准则。<br>下面就来看看闭包的创建过程：<br><img src="/images/bibao.png" alt="闭包创建过程"><br>闭包的执行过程跟函数的执行过程一样。</li>
+<li>闭包也是函数，它同样遵循函数执行时的准则。<br>下面就来看看闭包的创建过程：<br><img src="/images/bibao.png" alt="闭包创建过程"><br>闭包的执行过程跟函数的执行过程一样。<br><img src="/images/bibao-excute.png" alt="闭包创建过程"><br>（未完待续！）</li>
 </ul>
 
       </div>
       <footer class="article-footer">
-        <a data-url="http://blog.zhuoyuepie.com/2015/09/18/高性能-javascript-数据存取/" data-id="cieqmsmyn000d2kwpn7qil3qa" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+        <a data-url="http://blog.zhuoyuepie.com/2015/09/18/高性能-javascript-数据存取/" data-id="cier668d8000df0wpc6g8v8lv" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
         
         
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web前端/">web前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
@@ -200,6 +201,16 @@
     
 <nav id="article-nav">
   
+    <a href="/2015/09/19/高性能-javascript-Ajax/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <p class="article-nav-title">
+        
+          高性能 javascript系列(第二天) 理论篇之 Ajax
+        
+      </p>
+      <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+  
   
     <a href="/2015/09/18/高性能-javascript-加载和执行/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
@@ -217,6 +228,26 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/19/高性能-javascript-Ajax/" class="thumbnail">
+  
+    <span style="background-image:url(/images/high-javascript.jpg
+)" alt="高性能 javascript系列(第二天) 理论篇之 Ajax" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
+              <p class="item-title"><a href="/2015/09/19/高性能-javascript-Ajax/" class="title">高性能 javascript系列(第二天) 理论篇之 Ajax</a></p>
+              <p class="item-date"><time datetime="2015-09-18T16:00:00.000Z" itemprop="datePublished">2015-09-19</time></p>
+            </div>
+          </li>
         
           <li>
             
@@ -298,26 +329,6 @@
             </div>
           </li>
         
-          <li>
-            
-            <div class="item-thumbnail">
-              
-<a href="/2015/09/16/Ajax技术/" class="thumbnail">
-  
-    <span style="background-image:url(/images/ajax.jpg
-)" alt="Ajax 技术" class="thumbnail-image"></span>
-  
-</a>
-
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/文章/">文章</a></p>
-              <p class="item-title"><a href="/2015/09/16/Ajax技术/" class="title">Ajax 技术</a></p>
-              <p class="item-date"><time datetime="2015-09-15T16:00:00.000Z" itemprop="datePublished">2015-09-16</time></p>
-            </div>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -327,7 +338,7 @@
   <div class="widget-wrap widget-list">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/文章/">文章</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">2</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/文章/">文章</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -337,7 +348,7 @@
   <div class="widget-wrap widget-list">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">8</span></li></ul>
     </div>
   </div>
 
@@ -347,7 +358,7 @@
   <div class="widget-wrap widget-list">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/web前端/">web前端</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原创/">原创</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/web前端/">web前端</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原创/">原创</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -357,7 +368,7 @@
   <div class="widget-wrap widget-float">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/web前端/" style="font-size: 20px;">web前端</a> <a href="/tags/原创/" style="font-size: 16.67px;">原创</a> <a href="/tags/教程/" style="font-size: 10px;">教程</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/转载/" style="font-size: 13.33px;">转载</a>
+      <a href="/tags/web前端/" style="font-size: 20px;">web前端</a> <a href="/tags/原创/" style="font-size: 15px;">原创</a> <a href="/tags/教程/" style="font-size: 10px;">教程</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/转载/" style="font-size: 15px;">转载</a>
     </div>
   </div>
 
