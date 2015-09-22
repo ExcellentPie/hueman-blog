@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>高性能 javascript系列(第三天) 理论篇之 快速响应的用户界面 | Tuomong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;今天我要发个牢骚，md，不知道大家有木有过点网页半天没有反应的体验，我总是在网页没有反应的时候，重复点某个按钮，甚至在糟糕的情况下直接关掉网页，这还不是最糟糕的，最糟糕的是我忍不住关掉浏览器以解我心头之恨。我觉得再也没有比点网页后却毫无动静更令人沮丧了。如今，互联网让我们进入了快生活，似乎我们越来越期盼快体验。这到底是好事还是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能 javascript系列(第三天) 理论篇之 快速响应的用户界面">
+<meta property="og:url" content="http://blog.zhuoyuepie.com/2015/09/21/高性能-javascript-快速响应的用户界面/index.html">
+<meta property="og:site_name" content="Tuomong's Blog">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;今天我要发个牢骚，md，不知道大家有木有过点网页半天没有反应的体验，我总是在网页没有反应的时候，重复点某个按钮，甚至在糟糕的情况下直接关掉网页，这还不是最糟糕的，最糟糕的是我忍不住关掉浏览器以解我心头之恨。我觉得再也没有比点网页后却毫无动静更令人沮丧了。如今，互联网让我们进入了快生活，似乎我们越来越期盼快体验。这到底是好事还是">
+<meta property="og:image" content="http://blog.zhuoyuepie.com/images/high-javascript.jpg">
+<meta property="og:image" content="http://blog.zhuoyuepie.com/images/UI-work-process.png">
+<meta property="og:image" content="http://blog.zhuoyuepie.com/images/after-appear.png">
+<meta property="og:updated_time" content="2015-09-22T14:27:05.214Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能 javascript系列(第三天) 理论篇之 快速响应的用户界面">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;今天我要发个牢骚，md，不知道大家有木有过点网页半天没有反应的体验，我总是在网页没有反应的时候，重复点某个按钮，甚至在糟糕的情况下直接关掉网页，这还不是最糟糕的，最糟糕的是我忍不住关掉浏览器以解我心头之恨。我觉得再也没有比点网页后却毫无动静更令人沮丧了。如今，互联网让我们进入了快生活，似乎我们越来越期盼快体验。这到底是好事还是">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  
+  
+    <link rel="stylesheet" href="/scrollLoading/style.css" type="text/css">
+  
+  
+
+
+  
+    <style type="text/css">
+      .logo { background-image:url(/css/images/logo.jpg); }
+    </style>
+  
+
+  
+    <link href='//fonts.useso.com/css?family=Titillium+Web:300,400,600' rel='stylesheet' type='text/css'>
+    <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css" type="text/css">
+</head>
+
+<body>
+  <div id="wrap">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div class="container">
+      <div class="container-inner">
+        <div id="header-title">
+          <h1 class="logo-wrap">
+            <a href="/" class="logo"></a>
+          </h1>
+          
+            <h2 class="subtitle-wrap">
+              <p class="subtitle">Do what you can, try to do what you want to do.</p>
+            </h2>
+          
+        </div>
+        <div id="header-inner" class="nav-container">
+          <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+          <div class="nav-container-inner">
+            <ul id="main-nav">
+              
+                <li class="main-nav-list-item" ><a class="main-nav-list-link" href="/">主页</a></li>
+              
+                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/文章/">文章</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/笔记/">笔记</a></li></ul>
+                  
+            </ul>
+            <nav id="sub-nav">
+              <div id="search-form-wrap">
+                <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="搜索"><input type="hidden" name="sitesearch" value="http://blog.zhuoyuepie.com"></form>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <div class="main-body container-inner">
+        <div class="main-body-inner">
+          <section id="main">
+            <div class="main-body-header">
+
+              <h1 class="header"><a class="page-title-link" href="/categories/笔记/">笔记</a></h1>
+            </div>
+            <div class="main-body-content">
+              
+  <article id="post-高性能-javascript-快速响应的用户界面" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+      <!--  -->
+      
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      高性能 javascript系列(第三天) 理论篇之 快速响应的用户界面
+    </h1>
+  
+
+        </header>
+      
+      <p class="article-byline">
+        <a href="/2015/09/21/高性能-javascript-快速响应的用户界面/" class="article-date">
+  <time datetime="2015-09-20T16:00:00.000Z" itemprop="datePublished">2015-09-21</time>
+</a>
+      </p>
+      <div class="article-entry" itemprop="articleBody">
+        <p><img src="/images/high-javascript.jpg" alt="快速响应的用户界面"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;今天我要发个牢骚，md，不知道大家有木有过点网页半天没有反应的体验，我总是在网页没有反应的时候，重复点某个按钮，甚至在糟糕的情况下直接关掉网页，这还不是最糟糕的，最糟糕的是我忍不住关掉浏览器以解我心头之恨。我觉得再也没有比点网页后却毫无动静更令人沮丧了。如今，互联网让我们进入了快生活，似乎我们越来越期盼快体验。这到底是好事还是坏事？<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;牢骚完毕，追本溯源，由于web应用中有些是事务性的，导致我们现在提交表单时几乎总会遇到“请不要重复提交”的消息。用户会本能的去重复尝试那些没有带来明显变化的行为。所以确保web应用的响应速度是一个重要的性能关注点。</p>
+<h2 id="目的">目的</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本专题关注如何管理好javascript的运行时间、确保web应用响应速度。目的如下描述：</p>
+<ul>
+<li>掌握UI线程的工作原理</li>
+<li>学会用定时器处理时间较长的任务</li>
+<li>了解定时器的性能开销</li>
+<li>了解Web Workers</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，我还希望自己能够回答下面的一些问题：</p>
+<ul>
+<li>什么是UI线程？浏览器UI线程的工作原理？</li>
+<li>使用定时器与提升web应用性能有什么关系？</li>
+<li>定时器的使用会产生哪些性能问题？</li>
+<li>什么是web worker？web worker的工作原理是什么？web worker如何使用？两个web worker如何通信？<h2 id="开篇">开篇</h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我觉得有时候，人总是要在高强度压力下才会保持顽强、兴奋的状态。因此，我喜欢带着问题看书，边看边做笔记。一方面看书易使人困乏，消耗大量的脑细胞，另一方面动手可以让人保持兴奋，活跃人体细胞。我不是生物学家，我不知道这两个过程有木有互补的作用，但是经过我的实践，我发现，我看书的时候很少犯困，也能有所收获。我感觉这是一个好的办法。。<br>好了，下面正式进入正题。。。。<h3 id="浏览器UI线程">浏览器UI线程</h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;什么是UI线程？专家说：<code>用于执行javascript和更新用户界面的进程称为“UI线程”</code>。<br>作为技术宅或者菜鸟的我们，虽然专家总是整一些概念出来坑我们，但是我们还是要学会忍，因为概念这些东西是用来交流的，我们似乎总需要一些词汇、语法、专业术语，才能表述出我们的理解和认识。所以上面的概念我又信了，然后我加亮了，用来醒目。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UI线程的工作原理是什么呢？专家又发话了：<code>UI线程的工作基于一个简单的队列系统。任务会被保存在队列中直到进程空闲。一旦空闲，队列中的下一个任务就会被重新提取出来并运行。这些任务可以是javascript和用户界面更新，比如重排和重绘。任务在运行过程中，也有可能产生新的任务加入到队列中。</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;概念终归概念，原理终归原理。我们要学会用理论指导实践，做一个严格的马克思主义者。。。，额。。。，不多说了，说起马克思，可能又要说一堆了。我们来看一看简单的交互，点击按钮，屏幕上显示一条消息，这个过程中，UI线程如何工作的呢？<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;Browser UI Thread Example&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;button onclick=<span class="string">"handleClick()"</span>&gt;Click Me&lt;/button&gt;</span><br><span class="line">&lt;script <span class="built_in">type</span>=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">handleClick</span></span>()&#123;</span><br><span class="line">var div = document.createElement(<span class="string">"div"</span>);</span><br><span class="line">div.innerHTML = <span class="string">"Clicked!"</span>;</span><br><span class="line">document.body.appendChild(div);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>下面是专家用文字描述的UI线程在这个过程中做的工作：<br>当示例中的按钮被点击时，它会触发UI线程创建两个任务放入队列中</p>
+<ul>
+<li>更新被点击按钮的UI，它需要改变外观以表示它被点击了。</li>
+<li>执行javascript函数handleclick()中的代码。</li>
+</ul>
+<p>假设UI线程处于空闲状态，那么第一个任务将会执行，即UI线程会更新被点击按钮的UI，改变其外观。然后再执行函数handleclick(),在执行过程中会创建一个新的dom元素，并加入到body中，这是一个新的UI更新任务，它也会被添加到队列中，等待执行。因此handleclick函数执行结束后，UI还会更新一次。</p>
+<p>我们把这段文字转化为图更直观一些：<br><img src="/images/UI-work-process.png" alt="UI线程工作过程"><br>专家这样解读，<code>根据上图发现，UI线程只能原子性的执行任务队列中的任务，也就是说，如果用户试图在任务运行期间（如javascript代码运行、UI界面更新）与页面交互，不但没有即时更新，甚至可能新的更新任务都不会被创建到任务队列中。</code><br>另外，大多数专家都建议：<code>javascript操作花费的总时间不要超过100毫秒。</code></p>
+<h3 id="使用定时器">使用定时器</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;大家可能会有疑问，本专题关注的是如何管理好javascript的运行时间、确保web应用响应速度，这跟定时器有半毛钱的关系。这就是我们这些技术宅 and 菜鸟与专家之间区别。我们以为定时器就只能用来定时的完成某一项任务。可是在专家眼里，它不一样。有时候我们不得不佩服专家，总能把基础作为创新的资本，以此获取新颖的成果。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;专家这么认为：<code>尽管你尽最大努力，但难免会有一些复杂的javascript任务不能再100毫秒或者更短的时间完成。这个时候，最理想的办法就是让出UI线程的控制权，使得UI可以更新。让出控制权意味着停止执行javascript，使UI线程有机会，然后再执行javascript。而让出控制权，可以由定时器来完成。</code></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面专家的描述就是定时器与提升web应用性能之间的微妙关系。这种关系不是我们这些无名小辈能体会出来的，只有那些久经沙场的老行家才能发现的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么，如何使用定时器来改善web应用的性能呢？这成了技术宅 and 菜鸟关注的问题了。我想用句话来提醒我们这些技术宅 and 菜鸟一个事实：欲速则不达。我更想说，在使用定时器改善web应用性能之前，我们先看看定时器基础。</p>
+<h4 id="定时器基础">定时器基础</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在javascript中，有两个函数用来创建定时器任务，setTimeout()和setInterval()，它们的参数都一样，要执行的函数和执行前的等待时间（单位为毫秒）。专家告诉你：<code>请记住，第二个参数表示任务何时被添加到队列，而不是任务一定会在这段时间后执行</code>。这个时间指的是加入队列的时间，这段时间是从setTImeout或者setInterval被调用是开始。下面来看看一个例子：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var button = document.getElementById(<span class="string">"my-button"</span>);</span><br><span class="line">button.onclick = <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">oneMethod();</span><br><span class="line"><span class="built_in">set</span>Timeout(<span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">document.getElementById(<span class="string">"notice"</span>).style.color = <span class="string">"red"</span>;</span><br><span class="line">&#125;, <span class="number">250</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我喜欢用专家的解说：<code>当例子中的按钮被点击时，它会调用一个方法并设置一个定时器。改变notice元素的颜色的功能被包含在定时器中，并设置为在250毫秒后加入队列。这250毫秒是从setTimeout被执行时开始，而不是整个函数执行完成后开始。因此，如果setTimeout在时间点n开始执行，那么定时器任务将在n+250的时候加入队列</code>。下面是按钮被点击后发生的事情和时间的关系图：<br><img src="/images/after-appear.png" alt="按钮被点击后发生的事情和时间的关系图"></p>
+<h4 id="使用定时器提升web应用性能">使用定时器提升web应用性能</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们通常会把一个任务分解成一系列的子任务。如果一函数运行的时间太长，那么检查一下是否可以分解成一系列运行较短的子函数。这样一来，子函数就可以放入定时器中调用。由于定时器可以产生时间间隔，因此在这个时间间隔内，UI线程可以去处理其他的任务。事实上，就相当于把一个大的、时间周期长的任务，采用了时间片段的机制，分解为较小的、时间周期较短的子任务在不同的时间段内完成了。这无疑提高了web应用的吞吐量。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是一个分解任务的通用函数：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> multistep(steps, args, callback)&#123;</span><br><span class="line">	var tasks = steps.concat(); //<span class="built_in">clone</span> the array</span><br><span class="line">	<span class="built_in">set</span>Timeout(<span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">		//execute the next task</span><br><span class="line">		var task = tasks.shift();</span><br><span class="line">		task.apply(null, args || []);</span><br><span class="line">		//determine <span class="keyword">if</span> there<span class="string">'s more</span><br><span class="line">		if (tasks.length &gt; 0)&#123;</span><br><span class="line">			setTimeout(arguments.callee, 25);</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			callback();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;, 25);</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用它时，专家建议：<code>使用该函数必须以任务可以异步处理而不影响用户体验或者造成相关代码错误为前提条件</code>。</p>
+<h3 id="Web_Workers">Web Workers</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自javascript诞生以来，还没有办法在浏览器UI线程之外运行代码。Web Workers API改变了这种情况。它引入了一个接口，能使代码运行切不占用UI线程的时间。作为HTML最初的一部分，Web Workers API已经被分离出去成为独立的规范。Web Workers已经被Firefox 35、Chrome 3和Safari 4原生支持。Web Workers给web应用带来了潜在的巨大的性能提升。因为每个新的Worker都在自己的线程中运行代码。这意味着Worker运行代码不仅不会影响浏览器UI，也不会影响Worker中运行的代码。<br>（未完待续）</p>
+
+      </div>
+      <footer class="article-footer">
+        <a data-url="http://blog.zhuoyuepie.com/2015/09/21/高性能-javascript-快速响应的用户界面/" data-id="cieu14l31000idgwpvteeoxeg" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+        
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web前端/">web前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
+
+      </footer>
+    </div>
+  </article>
+  
+  
+
+            </div>
+          </section>
+          <aside id="sidebar">
+  <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+  <div class="sidebar-top">
+    <p>关注我 :</p>
+    <ul class="social-links">
+      
+        <li><a class="social-tooltip" title="github" href="https://github.com/ExcellentPie" target="_blank"><i class="icon fa fa-github"></i></a></li>
+      
+        <li><a class="social-tooltip" title="weibo" href="https://www.baidu.com" target="_blank"><i class="icon fa fa-weibo"></i></a></li>
+      
+    </ul>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/09/19/高性能-javascript-Ajax/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <p class="article-nav-title">高性能 javascript系列(第二天) 理论篇之 Ajax</p>
+      <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+    </a>
+  
+</nav>
+
+  
+  <div class="widgets-container">
+    
+      
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/21/高性能-javascript-快速响应的用户界面/" class="thumbnail">
+  
+    <span style="background-image:url(/images/high-javascript.jpg
+)" alt="高性能 javascript系列(第三天) 理论篇之 快速响应的用户界面" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
+              <p class="item-title"><a href="/2015/09/21/高性能-javascript-快速响应的用户界面/" class="title">高性能 javascript系列(第三天) 理论篇之 快速响应的用户界面</a></p>
+              <p class="item-date"><time datetime="2015-09-20T16:00:00.000Z" itemprop="datePublished">2015-09-21</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/19/高性能-javascript-Ajax/" class="thumbnail">
+  
+    <span style="background-image:url(/images/high-javascript.jpg
+)" alt="高性能 javascript系列(第二天) 理论篇之 Ajax" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
+              <p class="item-title"><a href="/2015/09/19/高性能-javascript-Ajax/" class="title">高性能 javascript系列(第二天) 理论篇之 Ajax</a></p>
+              <p class="item-date"><time datetime="2015-09-18T16:00:00.000Z" itemprop="datePublished">2015-09-19</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/18/高性能-javascript-数据存取/" class="thumbnail">
+  
+    <span style="background-image:url(/images/high-javascript.jpg
+)" alt="高性能 javascript系列(第一天) 理论篇之 数据存取" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
+              <p class="item-title"><a href="/2015/09/18/高性能-javascript-数据存取/" class="title">高性能 javascript系列(第一天) 理论篇之 数据存取</a></p>
+              <p class="item-date"><time datetime="2015-09-17T16:00:00.000Z" itemprop="datePublished">2015-09-18</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/18/高性能-javascript-加载和执行/" class="thumbnail">
+  
+    <span style="background-image:url(/images/high-javascript.jpg
+)" alt="高性能 javascript系列(第一天) 理论篇之 加载和执行" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
+              <p class="item-title"><a href="/2015/09/18/高性能-javascript-加载和执行/" class="title">高性能 javascript系列(第一天) 理论篇之 加载和执行</a></p>
+              <p class="item-date"><time datetime="2015-09-17T16:00:00.000Z" itemprop="datePublished">2015-09-18</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/17/javascript-闭包/" class="thumbnail">
+  
+    <span style="background-image:url(/images/package-detail.jpg
+)" alt="javascript 闭包" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/文章/">文章</a></p>
+              <p class="item-title"><a href="/2015/09/17/javascript-闭包/" class="title">javascript 闭包</a></p>
+              <p class="item-date"><time datetime="2015-09-16T16:00:00.000Z" itemprop="datePublished">2015-09-17</time></p>
+            </div>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/文章/">文章</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/web前端/">web前端</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原创/">原创</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-float">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/web前端/" style="font-size: 20px;">web前端</a> <a href="/tags/原创/" style="font-size: 13.33px;">原创</a> <a href="/tags/教程/" style="font-size: 10px;">教程</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/转载/" style="font-size: 16.67px;">转载</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="http://ql91.github.io">qinlu</a>
+          </li>
+        
+          <li>
+            <a href="http://xhay1122.com">熊孩纸</a>
+          </li>
+        
+          <li>
+            <a href="http://doubleyoyo.github.io//">周双</a>
+          </li>
+        
+          <li>
+            <a href="http://wangxizhu.github.io//">张川</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+        </div>
+      </div>
+    </div>
+    <footer id="footer">
+  
+  <div class="container">
+    <div class="container-inner">
+      <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+      <div class="credit">
+        <h1 class="logo-wrap">
+          <a href="/" class="logo"></a>
+        </h1>
+        <p>&copy; 2015 不想逗妹纸的小男孩</p>
+        <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+    
+
+
+  <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+  <script src="/scrollLoading/jquery.scrollLoading.js" type="text/javascript"></script>
+  <script src="/scrollLoading/main.js" type="text/javascript"></script>
+
+
+<script src="/js/html-patch.js" type="text/javascript"></script>
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

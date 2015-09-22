@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Tuomong's Blog">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我总是忍不住在写点笔记之前瞎逼逼几句，不知道为什么，总感觉这是一种习惯，我觉得人总得有习惯，不管是好的还是坏的，尽管我就没得好习惯。生活要是没有了习惯，就好像你不知道该什么时候起床，起床之后是不是要洗漱。好了，下面进入正题。今天的专题之一是Ajax。Ajax是高性能javascript的基础，Ross Harmes如是说。我也">
 <meta property="og:image" content="http://blog.zhuoyuepie.com/images/high-javascript.jpg">
-<meta property="og:updated_time" content="2015-09-21T13:19:16.801Z">
+<meta property="og:updated_time" content="2015-09-22T07:15:36.294Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高性能 javascript系列(第二天) 理论篇之 Ajax">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我总是忍不住在写点笔记之前瞎逼逼几句，不知道为什么，总感觉这是一种习惯，我觉得人总得有习惯，不管是好的还是坏的，尽管我就没得好习惯。生活要是没有了习惯，就好像你不知道该什么时候起床，起床之后是不是要洗漱。好了，下面进入正题。今天的专题之一是Ajax。Ajax是高性能javascript的基础，Ross Harmes如是说。我也">
@@ -112,7 +112,7 @@
       </p>
       <div class="article-entry" itemprop="articleBody">
         <p><img src="/images/high-javascript.jpg" alt="Ajax"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我总是忍不住在写点笔记之前瞎逼逼几句，不知道为什么，总感觉这是一种习惯，我觉得人总得有习惯，不管是好的还是坏的，尽管我就没得好习惯。生活要是没有了习惯，就好像你不知道该什么时候起床，起床之后是不是要洗漱。好了，下面进入正题。今天的专题之一是Ajax。Ajax是高性能javascript的基础，Ross Harmes如是说。我也不知道Ross Harmes是何许人也，是男是女？如果是女的，长得漂不漂亮？三围如何？如果是男的，我管个GG。我只关注Ajax，因为我是<code>技术宅</code>。</p>
-<h2 id="目的">目的</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我觉得学知识和做笔记总得有个目的，总得知道自己学的玩意到底有啥用，所以我总是在瞎逼逼几句后，把目的放在笔记的开端。你可以理解为带着目标做事效果会事半功倍，本专题的目的如下：</p>
+<h2 id="目的">目的</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我觉得学知识和做笔记总得有个目的，总得知道自己学的玩意到底有啥用，所以我总是在瞎逼逼几句后，把目的放在笔记的开端。大家可以理解为带着目标做事效果会事半功倍，本专题的目的如下：</p>
 <ul>
 <li>Ajax的使用。</li>
 <li>掌握服务器收发数据最快的技术。</li>
@@ -184,7 +184,7 @@
 </ul>
 <p>2：对于动态脚本注入的使用，专家Ross Harmes也给出了下面的建议：</p>
 <ul>
-<li><code>使用此项技术从你无法的服务器上请求数据时需要小心，javascript没有任何权限和访问控制的概念，因此你注入的动态脚本中的代码可能修改页面的内容甚至发送数据到第三方服务器。引入外部来源代码时，要务必小心</code>。<br>这项建议我信了，虽然不知道咋用，也不知道怎么向别人提供自己的动态脚本。从这里我觉得，专家ROSS Harmes是很谨慎的。<h5 id="Multipart_XHR">Multipart XHR</h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Multipart XHR是一项最新的技术。它最大的特色是允许客服端使用一个HTTP请求就可以从服务端向客服端传送多个资源。<code>它的原理是通过在服务端将资源打包成一个由双方约定的字符串分割的长字符串并发送给客服端。客服端再javascript代码处理这个长字符串</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们如何使用Multipart XHR?我突然发现一个问题，专家总是喜欢取名词、下定义、秀优越，我觉得我们还是太年轻了，猜不透专家在想什么。不过菜鸟总得要有自己的活法，总得要有自己的见解。我简单的把Multipart XHR理解为：事实上Multipart XHR仍然是通过XMLHttpRequest即XHR实现的，我们知道XHR对请求数据的过程提供了高级的控制，开发人员完全可以跟踪整个过程。比如，你可以在请求中添加任何头信息和参数，也能读取任何服务器放回的头信息和数据。这就意味着，开发者可以扩展HTTP的协议，实现自己的请求和处理。这也是为什么Multipart XHR客服端和服务端双方需要约定的原因。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然这只是我的见解，我觉得如果对XHR的过程进行控制，客服端和服务端双方做好约定，就能实现Multipart XHR。至于我可不可以实现Multipar XHR，我想先参考<a href="http://techfoolery.com/Mxhr/" target="_blank" rel="external">http://techfoolery.com/Mxhr/</a></li>
+<li><code>使用此项技术从你无法的服务器上请求数据时需要小心，javascript没有任何权限和访问控制的概念，因此你注入的动态脚本中的代码可能修改页面的内容甚至发送数据到第三方服务器。引入外部来源代码时，要务必小心</code>。<br>这项建议我信了，虽然不知道咋用，也不知道怎么向别人提供自己的动态脚本。从这里我觉得，专家ROSS Harmes是很谨慎的。<h5 id="Multipart_XHR">Multipart XHR</h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Multipart XHR是一项最新的技术。它最大的特色是允许客服端使用一个HTTP请求就可以从服务端向客服端传送多个资源。<code>它的原理是通过在服务端将资源打包成一个由双方约定的字符串分割的长字符串并发送给客服端。客服端再javascript代码处理这个长字符串</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们如何使用Multipart XHR?我突然发现一个问题，专家总是喜欢取名词、下定义、秀优越，我觉得我们还是太年轻了，猜不透专家在想什么。不过菜鸟总得要有自己的活法，总得要有自己的见解。我简单的把Multipart XHR理解为：事实上Multipart XHR仍然是通过XMLHttpRequest即XHR实现的，我们知道XHR对请求数据的过程提供了高级的控制，开发人员完全可以跟踪整个过程。比如，你可以在请求中添加任何头信息和参数，也能读取任何服务器放回的头信息和数据。这就意味着，开发者可以扩展HTTP的协议，实现自己的请求和处理。这也是为什么Multipart XHR需要客服端和服务端双方做好约定的原因。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然这只是我的见解，我觉得如果对XHR的过程进行控制，客服端和服务端双方做好约定，就能实现Multipart XHR。至于我可不可以实现Multipar XHR，我想先参考<a href="http://techfoolery.com/Mxhr/" target="_blank" rel="external">http://techfoolery.com/Mxhr/</a></li>
 </ul>
 <p>1：Multipart XHR的优点和缺点</p>
 <ul>
@@ -194,12 +194,12 @@
 <p>2：对于Multipart XHR的使用，专家ROSS Harmes有以下建议：</p>
 <ul>
 <li><code>当页面包含了大量其他地方用不到的资源，尤其是图片时，可以采用Multipart XHR</code>。</li>
-<li><code>当网站已经在每个页面中使用一个独立打包的javascript或css文件已减少HTTP请求时，可以采用Multipart XHR。（因为这个时候对每个页面来说文件都是唯一的，不需要浏览器缓存）</code><br>其实有时候专家说的还是很有道理，虽然大多时候人家饶了很多弯路讲一堆大道理，但作为菜鸟的我们还是宁可信其有，不可信其无的好。就比如说，ROSS Harmes讲了一大堆Multipart XHR后，总结了一句话：<code>由于HTTP请求时Ajax中最大瓶颈之一，因此减少其需要的数量会对整个页面的性能有很大的影响</code>。<br>我信了，所以我加亮了。<br>（未完待续！）</li>
+<li><code>当网站已经在每个页面中使用一个独立打包的javascript或css文件已减少HTTP请求时，可以采用Multipart XHR。（因为这个时候对每个页面来说文件都是唯一的，不需要浏览器缓存）</code><br>其实有时候专家说的还是很有道理，虽然大多时候人家饶了很多弯路讲一堆大道理，但作为菜鸟的我们还是宁可信其有，不可信其无的好。就比如说，ROSS Harmes讲了一大堆Multipart XHR后，总结了一句话：<code>由于HTTP请求是Ajax中最大瓶颈之一，因此减少其需要的数量会对整个页面的性能有很大的影响</code>。<br>我信了，所以我加亮了。<br>（未完待续！）</li>
 </ul>
 
       </div>
       <footer class="article-footer">
-        <a data-url="http://blog.zhuoyuepie.com/2015/09/19/高性能-javascript-Ajax/" data-id="cierxu6vp0000ocwp49wuaqp1" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+        <a data-url="http://blog.zhuoyuepie.com/2015/09/19/高性能-javascript-Ajax/" data-id="cieu14l3f000tdgwpf2rms1ej" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
         
         
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web前端/">web前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
@@ -228,6 +228,16 @@
     
 <nav id="article-nav">
   
+    <a href="/2015/09/21/高性能-javascript-快速响应的用户界面/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <p class="article-nav-title">
+        
+          高性能 javascript系列(第三天) 理论篇之 快速响应的用户界面
+        
+      </p>
+      <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+  
   
     <a href="/2015/09/18/高性能-javascript-数据存取/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
@@ -245,6 +255,26 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              
+<a href="/2015/09/21/高性能-javascript-快速响应的用户界面/" class="thumbnail">
+  
+    <span style="background-image:url(/images/high-javascript.jpg
+)" alt="高性能 javascript系列(第三天) 理论篇之 快速响应的用户界面" class="thumbnail-image"></span>
+  
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/笔记/">笔记</a></p>
+              <p class="item-title"><a href="/2015/09/21/高性能-javascript-快速响应的用户界面/" class="title">高性能 javascript系列(第三天) 理论篇之 快速响应的用户界面</a></p>
+              <p class="item-date"><time datetime="2015-09-20T16:00:00.000Z" itemprop="datePublished">2015-09-21</time></p>
+            </div>
+          </li>
         
           <li>
             
@@ -326,26 +356,6 @@
             </div>
           </li>
         
-          <li>
-            
-            <div class="item-thumbnail">
-              
-<a href="/2015/09/17/javascript-原型链/" class="thumbnail">
-  
-    <span style="background-image:url(/images/prototype_1.png
-)" alt="javascript 原型链" class="thumbnail-image"></span>
-  
-</a>
-
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/文章/">文章</a></p>
-              <p class="item-title"><a href="/2015/09/17/javascript-原型链/" class="title">javascript 原型链</a></p>
-              <p class="item-date"><time datetime="2015-09-16T16:00:00.000Z" itemprop="datePublished">2015-09-17</time></p>
-            </div>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -355,7 +365,7 @@
   <div class="widget-wrap widget-list">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/文章/">文章</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">3</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/文章/">文章</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -365,7 +375,7 @@
   <div class="widget-wrap widget-list">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">8</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">9</span></li></ul>
     </div>
   </div>
 
@@ -375,7 +385,7 @@
   <div class="widget-wrap widget-list">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/web前端/">web前端</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原创/">原创</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/web前端/">web前端</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原创/">原创</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">5</span></li></ul>
     </div>
   </div>
 
@@ -385,7 +395,7 @@
   <div class="widget-wrap widget-float">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/web前端/" style="font-size: 20px;">web前端</a> <a href="/tags/原创/" style="font-size: 15px;">原创</a> <a href="/tags/教程/" style="font-size: 10px;">教程</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/转载/" style="font-size: 15px;">转载</a>
+      <a href="/tags/web前端/" style="font-size: 20px;">web前端</a> <a href="/tags/原创/" style="font-size: 13.33px;">原创</a> <a href="/tags/教程/" style="font-size: 10px;">教程</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/转载/" style="font-size: 16.67px;">转载</a>
     </div>
   </div>
 
